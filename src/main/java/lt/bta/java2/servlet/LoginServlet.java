@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @WebServlet("/login")
@@ -23,7 +21,6 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         // kazkokia logika eiti i DB ir patikrinti ar teisingi user/password
-        //boolean valid = Objects.equals("Jonas", user) && Objects.equals("123", password);
         boolean valid = user != null && Objects.equals(User.users.get(user), password);
 
         if (valid) {

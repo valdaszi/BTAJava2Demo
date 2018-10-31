@@ -2,7 +2,6 @@ package lt.bta.java2.jaxrs;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +9,10 @@ import java.util.Set;
 public class RestApp extends Application {
 
     public Set<Class<?>> getClasses() {
-        return new HashSet<Class<?>>(Arrays.asList(EmployeeServiceImpl.class));
+        Set<Class<?>> resources = new HashSet<>();
+        resources.add(ObjectMapperContextResolver.class);
+        resources.add(EmployeeServiceImpl.class);
+        return resources;
     }
 
 }

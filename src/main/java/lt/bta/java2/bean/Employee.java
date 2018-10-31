@@ -2,15 +2,19 @@ package lt.bta.java2.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @XmlRootElement(name = "employee")
 public class Employee implements Serializable {
 
     private String name;
 
-    private double salary;
+    private Double salary;
 
     private int id;
+
+    private LocalDateTime updated;
+
 
     public String getName() {
         return name;
@@ -20,11 +24,11 @@ public class Employee implements Serializable {
         this.name = name;
     }
 
-    public double getSalary() {
+    public Double getSalary() {
         return salary;
     }
 
-    public void setSalary(double salary) {
+    public void setSalary(Double salary) {
         this.salary = salary;
     }
 
@@ -34,6 +38,14 @@ public class Employee implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public LocalDateTime getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(LocalDateTime updated) {
+        this.updated = updated;
     }
 
     @Override

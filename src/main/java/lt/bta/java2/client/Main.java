@@ -29,8 +29,8 @@ public class Main {
         Person p2 = new Person(); p2.setName("Ecka"); p2.setId(2); p2.setAge(25);
 
         //add person
-        System.out.println("Add Person Status="+ps.addPerson(p1));
-        System.out.println("Add Person Status="+ps.addPerson(p2));
+        System.out.println("Add Person Status=" + ps.addPerson(p1));
+        System.out.println("Add Person Status=" + ps.addPerson(p2));
 
         //get person
         System.out.println("Get person id=1: " + ps.getPerson(1));
@@ -39,7 +39,7 @@ public class Main {
         System.out.println("Get all persons: " + Arrays.asList(ps.getAllPersons()));
 
         //delete person
-        System.out.println("Delete Person id=2, status="+ps.deletePerson(2));
+        System.out.println("Delete Person id=2, status=" + ps.deletePerson(2));
 
         //get all persons
         System.out.println("Get all persons: " + Arrays.asList(ps.getAllPersons()));

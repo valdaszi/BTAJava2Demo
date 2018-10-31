@@ -12,6 +12,8 @@ public interface EmployeeService {
 
     Response getEmployee(int id);
 
+    Response updateEmployee(int id, Employee e);
+
     Employee[] getAllEmployees();
 
 }

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,12 +24,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         e1.setId(1);
         e1.setName("Jonas");
         e1.setSalary(1200.0);
+        e1.setUpdated(LocalDateTime.of(2018, 12, 15, 16, 46, 23));
         emps.put(e1.getId(), e1);
 
         Employee e2 = new Employee();
         e2.setId(2);
         e2.setName("Ona");
         e2.setSalary(1500.0);
+        e2.setUpdated(LocalDateTime.of(2018, 12, 15, 16, 45, 44));
         emps.put(e2.getId(), e2);
     }
 
@@ -37,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Path("/add")
     public Response addEmployee(Employee e) {
         GenericResponse response = new GenericResponse();
-        if(emps.get(e.getId()) != null){
+        if(emps.get(e.getId()) != null) {
             response.setStatus(false);
             response.setMessage("Employee Already Exists");
             response.setErrorCode("EC-01");
@@ -50,8 +53,35 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @PUT
+    @Path("/{id}")
+    public Response updateEmployee(@PathParam("id") int id, Employee e) {
+        GenericResponse response = new GenericResponse();
+        if(emps.get(id) == null) {
+            response.setStatus(false);
+            response.setMessage("Employee doesn't Exists");
+            response.setErrorCode("EC-02");
+            return Response.status(Response.Status.NOT_FOUND).entity(response).build();
+        }
+
+        // updating employee data
+        Employee employee = emps.get(id);
+        if (e.getName() != null && e.getName().trim().length() > 0) {
+            employee.setName(e.getName().trim());
+        }
+        if (e.getSalary() != null && e.getSalary() > 0) {
+            employee.setSalary(e.getSalary());
+        }
+        employee.setUpdated(LocalDateTime.now());
+
+        response.setStatus(true);
+        response.setMessage("Employee updates successfully");
+        return Response.ok(response).build();
+    }
+
+    @Override
     @DELETE
-    @Path("/{id}/delete")
+    @Path("/{id}")
     public Response deleteEmployee(@PathParam("id") int id) {
         GenericResponse response = new GenericResponse();
         if(emps.get(id) == null){
@@ -68,7 +98,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @GET
-    @Path("/{id}/get")
+    @Path("/{id}")
     public Response getEmployee(@PathParam("id") int id) {
         Employee e = emps.get(id);
         GenericResponse response = new GenericResponse();
