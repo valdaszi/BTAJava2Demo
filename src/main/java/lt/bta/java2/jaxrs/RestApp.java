@@ -12,6 +12,9 @@ public class RestApp extends Application {
         Set<Class<?>> resources = new HashSet<>();
         resources.add(ObjectMapperContextResolver.class);
         resources.add(EmployeeServiceImpl.class);
+
+        resources.add(lt.bta.java2.jpa.api.EmployeeServiceImpl.class);
+
         return resources;
     }
 
