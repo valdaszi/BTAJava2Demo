@@ -5,13 +5,17 @@
     <!-- Define persistence unit -->
     <persistence-unit name="my-persistence-unit">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>lt.bta.java2.jpa.entities.Employee</class>
+        <class>lt.bta.java2.jpa.entities.Salary</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/employees" />
             <property name="javax.persistence.jdbc.user" value="java2" />
             <property name="javax.persistence.jdbc.password" value="123" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect" />
+
             <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
         </properties>
     </persistence-unit>
 </persistence>

@@ -1,6 +1,8 @@
 package lt.bta.java2.jpa.api;
 
 import lt.bta.java2.jaxrs.GenericResponse;
+import lt.bta.java2.jpa.PersistenceUtil;
+import lt.bta.java2.jpa.dao.DaoImp;
 import lt.bta.java2.jpa.entities.Employee;
 
 import javax.persistence.EntityManager;
@@ -11,7 +13,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/emp")
+@Path("/employee")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class EmployeeServiceImpl implements EmployeeService {
@@ -20,13 +22,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     @GET
     @Path("/{empNo}")
     public Response get(@PathParam("empNo") int empNo) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("my-persistence-unit");
+//        EntityManagerFactory emf =
+//                Persistence.createEntityManagerFactory("my-persistence-unit");
+
+        EntityManagerFactory emf = PersistenceUtil.getEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
+        DaoImp<Employee> employeeDao = new DaoImp<>(em);
 
-        Employee e = em.find(Employee.class, empNo);
+        Employee e = employeeDao.get(Employee.class, empNo);
 
-        em.getTransaction().commit();
         em.close();
 
         GenericResponse response = new GenericResponse();
@@ -39,5 +43,31 @@ public class EmployeeServiceImpl implements EmployeeService {
             response.setData(e);
         }
         return Response.status(response.isStatus() ? HttpServletResponse.SC_OK : HttpServletResponse.SC_NOT_FOUND).entity(response).build();
+    }
+
+    @Override
+    @POST
+    @Path("/")
+    public Response save(Employee employee) {
+        EntityManager em = PersistenceUtil.getEntityManagerFactory().createEntityManager();
+        DaoImp<Employee> employeeDao = new DaoImp<>(em);
+
+        employeeDao.save(employee);
+
+        GenericResponse response = new GenericResponse();
+        response.setStatus(true);
+        response.setData(employee);
+        return Response.status(HttpServletResponse.SC_OK).entity(response).build();
+
+    }
+
+    @Override
+    public Response delete(Employee employee) {
+        return null;
+    }
+
+    @Override
+    public Response update(Employee employee) {
+        return null;
     }
 }
