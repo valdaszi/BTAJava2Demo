@@ -14,4 +14,6 @@ public interface EmployeeService {
 
     Response update(Employee employee);
 
+    Response list(int size, int skip);
+
 }

@@ -16,9 +16,9 @@ public class Salary {
     @Column
     private Integer salary;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "emp_no", insertable = false, updatable = false)
-//    private Employee employee;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "emp_no", insertable = false, updatable = false)
+    private Employee employee;
 
     public SalaryId getId() {
         return id;
@@ -44,11 +44,11 @@ public class Salary {
         this.salary = salary;
     }
 
-//    public Employee getEmployee() {
-//        return employee;
-//    }
-//
-//    public void setEmployee(Employee employee) {
-//        this.employee = employee;
-//    }
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 }

@@ -70,4 +70,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Response update(Employee employee) {
         return null;
     }
+
+    @Override
+    @GET
+    @Path("/list")
+    public Response list(@QueryParam("size") int size, @QueryParam("skip") int skip) {
+        EntityManager em = PersistenceUtil.getEntityManagerFactory().createEntityManager();
+        DaoImp<Employee> employeeDao = new DaoImp<>(em);
+
+        GenericResponse response = new GenericResponse();
+        response.setStatus(true);
+        response.setData(employeeDao.getPage(Employee.class, size, skip));
+        return Response.status(HttpServletResponse.SC_OK).entity(response).build();
+    }
 }

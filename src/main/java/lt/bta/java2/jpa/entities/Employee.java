@@ -30,11 +30,11 @@ public class Employee {
     @Column(name = "hire_date")
     private LocalDate hireDate;
 
-    @OneToMany(mappedBy = "id.empNo",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    private List<Salary> salaries = new ArrayList<>();
+//    @OneToMany(mappedBy = "id.empNo",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true,
+//            fetch = FetchType.EAGER)
+//    private List<Salary> salaries = new ArrayList<>();
 
 
     public Integer getEmpNo() {
@@ -85,11 +85,11 @@ public class Employee {
         this.hireDate = hireDate;
     }
 
-    public List<Salary> getSalaries() {
-        return salaries;
-    }
-
-    public void setSalaries(List<Salary> salaries) {
-        this.salaries = salaries;
-    }
+//    public List<Salary> getSalaries() {
+//        return salaries;
+//    }
+//
+//    public void setSalaries(List<Salary> salaries) {
+//        this.salaries = salaries;
+//    }
 }
