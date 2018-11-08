@@ -1,17 +1,17 @@
-package lt.bta.java2.jpa.api;
+package lt.bta.java2.jpa.api.imp;
 
-import lt.bta.java2.jaxrs.GenericResponse;
 import lt.bta.java2.jpa.PersistenceUtil;
+import lt.bta.java2.jpa.api.service.EmployeeService;
 import lt.bta.java2.jpa.dao.DaoImp;
 import lt.bta.java2.jpa.entities.Employee;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("/employee")
 @Produces(MediaType.APPLICATION_JSON)
@@ -21,7 +21,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @GET
     @Path("/{empNo}")
-    public Response get(@PathParam("empNo") int empNo) {
+    public Response get(@PathParam("empNo") int empNo, @QueryParam("salaries") boolean withSalaries) {
 //        EntityManagerFactory emf =
 //                Persistence.createEntityManagerFactory("my-persistence-unit");
 
@@ -29,20 +29,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         EntityManager em = emf.createEntityManager();
         DaoImp<Employee> employeeDao = new DaoImp<>(em);
 
-        Employee e = employeeDao.get(Employee.class, empNo);
+        Employee e = employeeDao.get(withSalaries ? Employee.GRAPH_SALARIES : null, Employee.class, empNo);
 
         em.close();
 
-        GenericResponse response = new GenericResponse();
-        if (e == null) {
-            response.setStatus(false);
-            response.setMessage("Employee Doesn't Exists");
-            response.setErrorCode("EC-01");;
-        } else {
-            response.setStatus(true);
-            response.setData(e);
-        }
-        return Response.status(response.isStatus() ? HttpServletResponse.SC_OK : HttpServletResponse.SC_NOT_FOUND).entity(response).build();
+        return Response
+                .status(e == null ? HttpServletResponse.SC_NOT_FOUND : HttpServletResponse.SC_OK)
+                .entity(e)
+                .build();
     }
 
     @Override
@@ -54,10 +48,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employeeDao.save(employee);
 
-        GenericResponse response = new GenericResponse();
-        response.setStatus(true);
-        response.setData(employee);
-        return Response.status(HttpServletResponse.SC_OK).entity(response).build();
+        return Response.status(HttpServletResponse.SC_OK).entity(employee).build();
 
     }
 
@@ -78,9 +69,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         EntityManager em = PersistenceUtil.getEntityManagerFactory().createEntityManager();
         DaoImp<Employee> employeeDao = new DaoImp<>(em);
 
-        GenericResponse response = new GenericResponse();
-        response.setStatus(true);
-        response.setData(employeeDao.getPage(Employee.class, size, skip));
-        return Response.status(HttpServletResponse.SC_OK).entity(response).build();
+        List<Employee> employeeList = employeeDao.getPage(Employee.class, size, skip);
+
+        return Response.status(HttpServletResponse.SC_OK).entity(employeeList).build();
     }
 }

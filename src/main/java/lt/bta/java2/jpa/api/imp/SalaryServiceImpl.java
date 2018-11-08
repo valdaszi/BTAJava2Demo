@@ -1,7 +1,7 @@
-package lt.bta.java2.jpa.api;
+package lt.bta.java2.jpa.api.imp;
 
-import lt.bta.java2.jaxrs.GenericResponse;
 import lt.bta.java2.jpa.PersistenceUtil;
+import lt.bta.java2.jpa.api.service.SalaryService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -27,10 +27,6 @@ public class SalaryServiceImpl implements SalaryService {
         query.setParameter("empNo", empNo);
         List result = query.getResultList();
 
-        GenericResponse response = new GenericResponse();
-        response.setStatus(true);
-        response.setData(result);
-
-        return Response.status(HttpServletResponse.SC_OK).entity(response).build();
+        return Response.status(HttpServletResponse.SC_OK).entity(result).build();
     }
 }

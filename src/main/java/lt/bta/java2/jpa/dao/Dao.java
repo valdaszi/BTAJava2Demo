@@ -6,6 +6,8 @@ public interface Dao<T> {
 
     T get(Class<T> entityClass, Object pk);
 
+    T get(String graphName, Class<T> entityClass, Object pk);
+
     void save(T t);
 
     void update(T t);

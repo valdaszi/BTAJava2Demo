@@ -1,11 +1,14 @@
 package lt.bta.java2.jpa.dao;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class DaoImp<T> implements Dao<T> {
@@ -18,7 +21,18 @@ public class DaoImp<T> implements Dao<T> {
 
     @Override
     public T get(Class<T> entityClass, Object pk) {
-        return entityManager.find(entityClass, pk);
+        return get(null, entityClass, pk);
+    }
+
+    @Override
+    public T get(String graphName, Class<T> entityClass, Object pk) {
+        Map<String, Object> hints = null;
+        if (graphName != null) {
+            hints = new HashMap<>();
+            EntityGraph graph = entityManager.getEntityGraph(graphName);
+            hints.put("javax.persistence.fetchgraph", graph);
+        }
+        return entityManager.find(entityClass, pk, hints);
     }
 
     @Override
