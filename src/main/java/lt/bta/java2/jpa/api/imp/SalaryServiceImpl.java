@@ -23,7 +23,7 @@ public class SalaryServiceImpl implements SalaryService {
 
         EntityManager em = PersistenceUtil.getEntityManagerFactory().createEntityManager();
 
-        Query query = em.createQuery("from Salary where id.empNo = :empNo");
+        Query query = em.createQuery("from Salary where empNo = :empNo");
         query.setParameter("empNo", empNo);
         List result = query.getResultList();
 

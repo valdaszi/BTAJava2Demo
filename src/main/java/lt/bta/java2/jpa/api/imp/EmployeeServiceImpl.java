@@ -2,8 +2,9 @@ package lt.bta.java2.jpa.api.imp;
 
 import lt.bta.java2.jpa.PersistenceUtil;
 import lt.bta.java2.jpa.api.service.EmployeeService;
-import lt.bta.java2.jpa.dao.DaoImp;
+import lt.bta.java2.jpa.dao.EmployeeDao;
 import lt.bta.java2.jpa.entities.Employee;
+import lt.bta.java2.jpa.entities.Salary;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -27,16 +28,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         EntityManagerFactory emf = PersistenceUtil.getEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
-        DaoImp<Employee> employeeDao = new DaoImp<>(em);
+        EmployeeDao employeeDao = new EmployeeDao(em);
 
         Employee e = employeeDao.get(withSalaries ? Employee.GRAPH_SALARIES : null, Employee.class, empNo);
 
         em.close();
 
-        return Response
-                .status(e == null ? HttpServletResponse.SC_NOT_FOUND : HttpServletResponse.SC_OK)
-                .entity(e)
-                .build();
+        return Response.status(HttpServletResponse.SC_OK).entity(e).build();
+//        return Response
+//                .status(e == null ? HttpServletResponse.SC_NOT_FOUND : HttpServletResponse.SC_OK)
+//                .entity(e)
+//                .build();
     }
 
     @Override
@@ -44,22 +46,36 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Path("/")
     public Response save(Employee employee) {
         EntityManager em = PersistenceUtil.getEntityManagerFactory().createEntityManager();
-        DaoImp<Employee> employeeDao = new DaoImp<>(em);
+        EmployeeDao employeeDao = new EmployeeDao(em);
 
         employeeDao.save(employee);
 
-        return Response.status(HttpServletResponse.SC_OK).entity(employee).build();
+        return Response.status(HttpServletResponse.SC_CREATED).entity(employee).build();
 
     }
 
     @Override
-    public Response delete(Employee employee) {
-        return null;
+    @DELETE
+    @Path("/{empNo}")
+    public Response delete(@PathParam("empNo") int empNo) {
+        EntityManager em = PersistenceUtil.getEntityManagerFactory().createEntityManager();
+        EmployeeDao employeeDao = new EmployeeDao(em);
+
+        employeeDao.delete(Employee.class, empNo);
+
+        return Response.status(HttpServletResponse.SC_OK).entity("Deleted").build();
     }
 
     @Override
-    public Response update(Employee employee) {
-        return null;
+    @PUT
+    @Path("/{empNo}")
+    public Response update(@PathParam("empNo") int empNo, Employee employee) {
+        EntityManager em = PersistenceUtil.getEntityManagerFactory().createEntityManager();
+        EmployeeDao employeeDao = new EmployeeDao(em);
+
+        employeeDao.update(empNo, employee);
+
+        return Response.status(HttpServletResponse.SC_OK).entity("Updated").build();
     }
 
     @Override
@@ -67,10 +83,22 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Path("/list")
     public Response list(@QueryParam("size") int size, @QueryParam("skip") int skip) {
         EntityManager em = PersistenceUtil.getEntityManagerFactory().createEntityManager();
-        DaoImp<Employee> employeeDao = new DaoImp<>(em);
+        EmployeeDao employeeDao = new EmployeeDao(em);
 
         List<Employee> employeeList = employeeDao.getPage(Employee.class, size, skip);
 
         return Response.status(HttpServletResponse.SC_OK).entity(employeeList).build();
+    }
+
+    @Override
+    @POST
+    @Path("/{empNo}/salary")
+    public Response addSalary(@PathParam("empNo") int empNo, Salary salary) {
+        EntityManager em = PersistenceUtil.getEntityManagerFactory().createEntityManager();
+        EmployeeDao employeeDao = new EmployeeDao(em);
+
+        employeeDao.addSalary(empNo, salary);
+
+        return Response.status(HttpServletResponse.SC_OK).entity("Salary added").build();
     }
 }

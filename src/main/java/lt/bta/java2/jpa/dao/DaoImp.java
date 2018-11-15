@@ -41,13 +41,16 @@ public class DaoImp<T> implements Dao<T> {
     }
 
     @Override
-    public void update(T t) {
-        executeInsideTransaction(entityManager -> entityManager.merge(t));
+    public void update(Object pk, T t) {
+        throw new RuntimeException("Reikia implementuoti!!!");
     }
 
     @Override
-    public void delete(T t) {
-        executeInsideTransaction(entityManager -> entityManager.remove(t));
+    public void delete(Class<T> entityClass, Object pk) {
+        executeInsideTransaction(entityManager -> {
+            T t = get(entityClass, pk);
+            entityManager.remove(t);
+        });
     }
 
     @Override
@@ -62,7 +65,7 @@ public class DaoImp<T> implements Dao<T> {
         return result;
     }
 
-    private void executeInsideTransaction(Consumer<EntityManager> action) {
+    protected void executeInsideTransaction(Consumer<EntityManager> action) {
         EntityTransaction tx = entityManager.getTransaction();
         try {
             tx.begin();

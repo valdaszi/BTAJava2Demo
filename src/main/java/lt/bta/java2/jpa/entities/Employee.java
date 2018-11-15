@@ -1,50 +1,50 @@
 package lt.bta.java2.jpa.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "employees")
-@NamedEntityGraph(name = Employee.GRAPH_SALARIES, attributeNodes = @NamedAttributeNode(value = "salaries"))
+@NamedEntityGraph(name = Employee.GRAPH_SALARIES,
+        attributeNodes = @NamedAttributeNode("salaries"))
 public class Employee {
 
     public static final String GRAPH_SALARIES = "graph.Employee.salaries";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "emp_no")
-    private Integer empNo;
+    @Column(name = "emp_no", nullable = false)
+    private int empNo;
 
-    @Column(name = "birth_date")
+    @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 
-    @Column(name = "first_name", length = 14)
+    @Column(name = "first_name", nullable = false, length = 14)
     private String firstName;
 
-    @Column(name = "last_name", length = 16)
+    @Column(name = "last_name", nullable = false, length = 16)
     private String lastName;
 
-    @Column
+    @Column(name = "gender", nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(name = "hire_date")
+    @Column(name = "hire_date", nullable = false)
     private LocalDate hireDate;
 
-    @OneToMany(mappedBy = "id.empNo",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private List<Salary> salaries = new ArrayList<>();
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("employee")
+    private List<Salary> salaries;
 
-
-    public Integer getEmpNo() {
+    public int getEmpNo() {
         return empNo;
     }
 
-    public void setEmpNo(Integer empNo) {
+    public void setEmpNo(int empNo) {
         this.empNo = empNo;
     }
 
@@ -88,11 +88,41 @@ public class Employee {
         this.hireDate = hireDate;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return empNo == employee.empNo &&
+                Objects.equals(birthDate, employee.birthDate) &&
+                Objects.equals(firstName, employee.firstName) &&
+                Objects.equals(lastName, employee.lastName) &&
+                Objects.equals(gender, employee.gender) &&
+                Objects.equals(hireDate, employee.hireDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(empNo, birthDate, firstName, lastName, gender, hireDate);
+    }
+
     public List<Salary> getSalaries() {
         return salaries;
     }
 
     public void setSalaries(List<Salary> salaries) {
         this.salaries = salaries;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "empNo=" + empNo +
+                ", birthDate=" + birthDate +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", gender=" + gender +
+                ", hireDate=" + hireDate +
+                '}';
     }
 }

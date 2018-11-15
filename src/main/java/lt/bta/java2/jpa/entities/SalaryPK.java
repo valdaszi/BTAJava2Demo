@@ -1,33 +1,26 @@
 package lt.bta.java2.jpa.entities;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@Embeddable
-public class SalaryId implements Serializable {
+public class SalaryPK implements Serializable {
 
-    @Column(name = "emp_no")
-    protected Integer empNo;
+    @Id
+    @Column(name = "emp_no", nullable = false)
+    private int empNo;
 
-    @Column(name = "from_date")
+    @Id
+    @Column(name = "from_date", nullable = false)
     private LocalDate fromDate;
 
-    public SalaryId() {
-    }
-
-    public SalaryId(Integer empNo, LocalDate fromDate) {
-        this.empNo = empNo;
-        this.fromDate = fromDate;
-    }
-
-    public Integer getEmpNo() {
+    public int getEmpNo() {
         return empNo;
     }
 
-    public void setEmpNo(Integer empNo) {
+    public void setEmpNo(int empNo) {
         this.empNo = empNo;
     }
 
@@ -43,9 +36,9 @@ public class SalaryId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SalaryId salaryId = (SalaryId) o;
-        return Objects.equals(empNo, salaryId.empNo) &&
-                Objects.equals(fromDate, salaryId.fromDate);
+        SalaryPK salaryPK = (SalaryPK) o;
+        return empNo == salaryPK.empNo &&
+                Objects.equals(fromDate, salaryPK.fromDate);
     }
 
     @Override

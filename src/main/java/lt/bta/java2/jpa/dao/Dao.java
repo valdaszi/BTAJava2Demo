@@ -10,9 +10,9 @@ public interface Dao<T> {
 
     void save(T t);
 
-    void update(T t);
+    void update(Object pk, T t);
 
-    void delete(T t);
+    void delete(Class<T> entityClass, Object pk);
 
     List<T> getPage(Class<T> entityClass, int pageSize, int skip);
 
