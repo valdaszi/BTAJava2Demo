@@ -4,6 +4,7 @@ import lt.bta.java2.jpa.entities.Employee;
 import lt.bta.java2.jpa.entities.Salary;
 
 import javax.ws.rs.core.Response;
+import java.time.LocalDate;
 
 public interface EmployeeService {
 
@@ -18,4 +19,6 @@ public interface EmployeeService {
     Response list(int size, int skip);
 
     Response addSalary(int empNo, Salary salary);
+
+    Response removeSalary(int empNo, String dateFrom);
 }

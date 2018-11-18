@@ -4,6 +4,7 @@ import lt.bta.java2.jpa.entities.Employee;
 import lt.bta.java2.jpa.entities.Salary;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class EmployeeDao extends DaoImp<Employee> {
@@ -20,17 +21,27 @@ public class EmployeeDao extends DaoImp<Employee> {
             empOrg.setBirthDate(employee.getBirthDate());
             empOrg.setHireDate(employee.getHireDate());
             empOrg.setGender(employee.getGender());
-            em.merge(empOrg);
+            em.persist(empOrg);
         });
     }
 
-    public void addSalary(Object pk, Salary salary) {
+    public void addSalary(int empNo, Salary salary) {
         executeInsideTransaction(em -> {
-            Employee employee = em.find(Employee.class, pk);
-            if (employee.getSalaries() == null) employee.setSalaries(new ArrayList<>());
-            salary.setEmpNo(employee.getEmpNo());
-            employee.getSalaries().add(salary);
-            em.merge(employee);
+            Employee employee = em.find(Employee.class, empNo);
+            if (employee == null) return;
+            employee.addSalary(salary);
+            em.persist(employee);
+        });
+    }
+
+    public void removeSalary(int empNo, LocalDate dateFrom) {
+        executeInsideTransaction(em -> {
+            Employee employee = em.find(Employee.class, empNo);
+            if (employee == null || employee.getSalaries() == null) return;
+            employee.getSalaries().stream()
+                    .filter(it -> it.getFromDate().equals(dateFrom))
+                    .findAny()
+                    .ifPresent(employee::removeSalary);
         });
     }
 }

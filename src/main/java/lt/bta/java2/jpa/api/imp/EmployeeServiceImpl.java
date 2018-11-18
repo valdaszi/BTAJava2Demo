@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.LocalDate;
 import java.util.List;
 
 @Path("/employee")
@@ -100,5 +101,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDao.addSalary(empNo, salary);
 
         return Response.status(HttpServletResponse.SC_OK).entity("Salary added").build();
+    }
+
+    @Override
+    @Path("/{empNo}/salary/{dateFrom}")
+    @DELETE
+    public Response removeSalary(@PathParam("empNo") int empNo, @PathParam("dateFrom") String dateFrom) {
+        EntityManager em = PersistenceUtil.getEntityManagerFactory().createEntityManager();
+        EmployeeDao employeeDao = new EmployeeDao(em);
+        employeeDao.removeSalary(empNo, LocalDate.parse(dateFrom));
+
+        return Response.status(HttpServletResponse.SC_OK).entity("Salary removed").build();
     }
 }

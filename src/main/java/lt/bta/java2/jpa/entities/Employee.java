@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,7 +37,9 @@ public class Employee {
     @Column(name = "hire_date", nullable = false)
     private LocalDate hireDate;
 
-    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST},
+            orphanRemoval = true)
     @JsonIgnoreProperties("employee")
     private List<Salary> salaries;
 
@@ -112,6 +115,18 @@ public class Employee {
 
     public void setSalaries(List<Salary> salaries) {
         this.salaries = salaries;
+    }
+
+    public void addSalary(Salary salary) {
+        if (this.salaries == null) this.salaries = new ArrayList<>();
+        this.salaries.add(salary);
+        salary.setEmpNo(this.getEmpNo());
+        salary.setEmployee(this);
+    }
+
+    public void removeSalary(Salary salary) {
+        salary.setEmployee(null);
+        this.salaries.remove(salary);
     }
 
     @Override
