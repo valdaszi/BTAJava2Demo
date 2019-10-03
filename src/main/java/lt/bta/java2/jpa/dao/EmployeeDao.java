@@ -5,9 +5,9 @@ import lt.bta.java2.jpa.entities.Salary;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class EmployeeDao extends DaoImp<Employee> {
+
     public EmployeeDao(EntityManager entityManager) {
         super(entityManager);
     }
@@ -38,7 +38,8 @@ public class EmployeeDao extends DaoImp<Employee> {
         executeInsideTransaction(em -> {
             Employee employee = em.find(Employee.class, empNo);
             if (employee == null || employee.getSalaries() == null) return;
-            employee.getSalaries().stream()
+            employee.getSalaries()
+                    .stream()
                     .filter(it -> it.getFromDate().equals(dateFrom))
                     .findAny()
                     .ifPresent(employee::removeSalary);

@@ -2,7 +2,7 @@ package lt.bta.java2.jaxrs;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL) // jei nenorim kad į json patektų laukai, kurių reikšmė null
+@JsonInclude(JsonInclude.Include.NON_NULL) // jei nenorime kad į json patektų laukai, kurių reikšmė null
 public class GenericResponse {
 
     private boolean status;

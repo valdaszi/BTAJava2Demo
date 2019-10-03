@@ -4,19 +4,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-  <display-name>BTA Java2 Demo App</display-name>
+    <display-name>BTA Java2 Demo App</display-name>
 
-  <servlet>
-    <servlet-name>LabasRytas</servlet-name>
-    <servlet-class>lt.bta.java2.servlet.LabasServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LabasRytas</servlet-name>
-    <url-pattern>/labas-vakaras/*</url-pattern>
-    <url-pattern>/labas-rytas/*</url-pattern>
-  </servlet-mapping>
+    <servlet>
+        <servlet-name>LabasRytas</servlet-name>
+        <servlet-class>lt.bta.java2.servlet.LabasServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LabasRytas</servlet-name>
+        <url-pattern>/labas-vakaras/*</url-pattern>
+        <url-pattern>/labas-rytas/*</url-pattern>
+    </servlet-mapping>
 
-  <!--<servlet>-->
+    <!--<servlet>-->
     <!--<servlet-name>faces</servlet-name>-->
     <!--<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>-->
     <!--&lt;!&ndash; load-on-startup:-->
@@ -26,40 +26,40 @@
     <!--The container may choose the order of loading of servlets with the same load-on-startup value-->
     <!--&ndash;&gt;-->
     <!--<load-on-startup>1</load-on-startup>-->
-  <!--</servlet>-->
+    <!--</servlet>-->
 
-  <!--<servlet-mapping>-->
+    <!--<servlet-mapping>-->
     <!--<servlet-name>faces</servlet-name>-->
     <!--<url-pattern>*.xhtml</url-pattern>-->
-  <!--</servlet-mapping>-->
+    <!--</servlet-mapping>-->
 
-  <!-- Errors handling -->
-  <error-page>
-    <error-code>404</error-code>
-    <location>/AppExceptionHandler</location>
-  </error-page>
+    <!-- Errors handling -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/AppExceptionHandler</location>
+    </error-page>
 
-  <error-page>
-    <exception-type>javax.servlet.ServletException</exception-type>
-    <location>/AppExceptionHandler</location>
-  </error-page>
+    <error-page>
+        <exception-type>javax.servlet.ServletException</exception-type>
+        <location>/AppExceptionHandler</location>
+    </error-page>
 
-  <!-- JAX-WS -->
-  <listener>
-    <listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
-  </listener>
-  <servlet>
-    <servlet-name>JAXWSServlet</servlet-name>
-    <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>JAXWSServlet</servlet-name>
-    <url-pattern>/hello</url-pattern>
-    <url-pattern>/person</url-pattern>
-  </servlet-mapping>
-  <session-config>
-    <session-timeout>120</session-timeout>
-  </session-config>
+    <!-- JAX-WS -->
+    <listener>
+        <listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
+    </listener>
+    <servlet>
+        <servlet-name>JAXWSServlet</servlet-name>
+        <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JAXWSServlet</servlet-name>
+        <url-pattern>/hello</url-pattern>
+        <url-pattern>/person</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>120</session-timeout>
+    </session-config>
 
 </web-app>

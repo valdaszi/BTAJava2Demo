@@ -8,7 +8,6 @@ import lt.bta.java2.jpa.entities.Salary;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -24,22 +23,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     @GET
     @Path("/{empNo}")
     public Response get(@PathParam("empNo") int empNo, @QueryParam("salaries") boolean withSalaries) {
-//        EntityManagerFactory emf =
-//                Persistence.createEntityManagerFactory("my-persistence-unit");
-
-        EntityManagerFactory emf = PersistenceUtil.getEntityManagerFactory();
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = PersistenceUtil.getEntityManagerFactory().createEntityManager();
         EmployeeDao employeeDao = new EmployeeDao(em);
 
         Employee e = employeeDao.get(withSalaries ? Employee.GRAPH_SALARIES : null, Employee.class, empNo);
 
-        em.close();
-
-        return Response.status(HttpServletResponse.SC_OK).entity(e).build();
-//        return Response
-//                .status(e == null ? HttpServletResponse.SC_NOT_FOUND : HttpServletResponse.SC_OK)
-//                .entity(e)
-//                .build();
+        if (e == null) throw new NotFoundException();
+        return Response.status(Response.Status.OK).entity(e).build();
     }
 
     @Override
@@ -51,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employeeDao.save(employee);
 
-        return Response.status(HttpServletResponse.SC_CREATED).entity(employee).build();
+        return Response.status(Response.Status.OK).entity(employee).build();
 
     }
 
@@ -64,7 +54,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employeeDao.delete(Employee.class, empNo);
 
-        return Response.status(HttpServletResponse.SC_OK).entity("Deleted").build();
+        return Response.status(Response.Status.OK).entity("Deleted").build();
     }
 
     @Override
@@ -76,7 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employeeDao.update(empNo, employee);
 
-        return Response.status(HttpServletResponse.SC_OK).entity("Updated").build();
+        return Response.status(Response.Status.OK).entity("Updated").build();
     }
 
     @Override
@@ -88,7 +78,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         List<Employee> employeeList = employeeDao.getPage(Employee.class, size, skip);
 
-        return Response.status(HttpServletResponse.SC_OK).entity(employeeList).build();
+        return Response.status(Response.Status.OK).entity(employeeList).build();
     }
 
     @Override
@@ -100,7 +90,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employeeDao.addSalary(empNo, salary);
 
-        return Response.status(HttpServletResponse.SC_OK).entity("Salary added").build();
+        return Response.status(Response.Status.OK).entity("Salary added").build();
     }
 
     @Override
@@ -111,6 +101,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         EmployeeDao employeeDao = new EmployeeDao(em);
         employeeDao.removeSalary(empNo, LocalDate.parse(dateFrom));
 
-        return Response.status(HttpServletResponse.SC_OK).entity("Salary removed").build();
+        return Response.status(Response.Status.OK).entity("Salary removed").build();
     }
 }
